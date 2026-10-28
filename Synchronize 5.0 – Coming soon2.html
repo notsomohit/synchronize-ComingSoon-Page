@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Synchronize 5.0 – Coming soon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+:root{
+  --dayO:1; --nightO:0; --starO:0; --birdO:1; --hazeN:0; --sunY:0vh; --moonY:80vh;
+  --cw:#ffffff; --cs:#bfe6ff; --bird:#0b1330;
+  --navy:#0b1330; --deep:#0b1a8a; --blue:#1b3dff; --lime:#c6ff1a; --ink:#ffffff;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--dayO:0;--nightO:1;--starO:1;--birdO:0;--hazeN:1;--sunY:80vh;--moonY:0vh;--cw:#6f82e6;--cs:#3d4fb0;--bird:#e8ecff}
+}
+:root[data-theme="dark"]{--dayO:0;--nightO:1;--starO:1;--birdO:0;--hazeN:1;--sunY:80vh;--moonY:0vh;--cw:#6f82e6;--cs:#3d4fb0;--bird:#e8ecff}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;min-height:100%;background:#1496ff;color:var(--ink);font-family:"Press Start 2P",ui-monospace,monospace;overflow-x:hidden}
+.sky{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.layer{position:absolute;inset:0;transition:opacity 1.4s ease}
+.layer.day{background:linear-gradient(#1496ff,#7fd6ff 70%);opacity:var(--dayO)}
+.layer.night{background:linear-gradient(#050a3a,#1b2a9c 78%);opacity:var(--nightO)}
+.stars,.birds{position:absolute;inset:0;transition:opacity 1.4s ease}
+.stars{opacity:var(--starO)}.birds{opacity:var(--birdO)}
+.stars i{position:absolute;background:#fff;animation:twinkle 3s steps(2) infinite}
+.shoot{position:absolute;top:14%;left:62%;width:110px;height:3px;background:linear-gradient(90deg,transparent,#fff);transform:rotate(30deg);opacity:0;animation:shoot 9s linear infinite}
+@keyframes twinkle{50%{opacity:.25}}
+@keyframes shoot{0%,80%{opacity:0;transform:translate(0,0) rotate(30deg)}82%{opacity:1}100%{opacity:0;transform:translate(-260px,150px) rotate(30deg)}}
+.orb{position:absolute;right:9%;top:9%;width:clamp(52px,9vw,100px);transition:transform 1.4s cubic-bezier(.6,0,.3,1)}
+.orb svg{display:block;width:100%}
+.sun{transform:translateY(var(--sunY)) rotate(calc(var(--sunY) * 0.3));filter:drop-shadow(0 0 18px rgba(255,200,40,.8))}
+.moon{transform:translateY(var(--moonY)) rotate(calc(var(--moonY) * -0.3));filter:drop-shadow(0 0 16px rgba(255,246,200,.6))}
+.cloud,.bird{position:absolute;left:0;will-change:transform;animation:drift linear infinite}
+.cloud svg,.bird svg{display:block;width:100%;height:auto}
+.cloud rect,.bird rect{transition:fill 1.4s ease}
+.bird{width:var(--w);height:2px}
+.mate{position:absolute;width:var(--w);animation:bob 2.6s ease-in-out infinite}
+.bird g{animation-duration:.8s;animation-timing-function:steps(1,end);animation-iteration-count:infinite;animation-delay:var(--fd,0s)}
+.bird .fa{animation-name:fa}.bird .fm{animation-name:fm}.bird .fb{animation-name:fb}
+@keyframes drift{from{transform:translateX(-35vw)}to{transform:translateX(115vw)}}
+@keyframes bob{50%{transform:translateY(10px)}}
+@keyframes fa{0%{opacity:1}25%{opacity:0}100%{opacity:0}}
+@keyframes fm{0%{opacity:0}25%{opacity:1}50%{opacity:0}75%{opacity:1}100%{opacity:0}}
+@keyframes fb{0%{opacity:0}50%{opacity:1}75%{opacity:0}100%{opacity:0}}
+
+.toggle{position:fixed;z-index:10;top:calc(env(safe-area-inset-top,0px) + 12px);right:12px;display:grid;grid-template-columns:1fr 1fr;
+  background:var(--navy);border:3px solid var(--lime);box-shadow:4px 4px 0 var(--deep);padding:0;cursor:pointer;color:inherit}
+.toggle .cell{position:relative;z-index:1;display:grid;place-items:center;width:44px;height:40px}
+.toggle .cell svg{width:22px;display:block}
+.toggle .knob{position:absolute;top:0;left:0;width:50%;height:100%;background:var(--blue);transition:transform .45s steps(5)}
+.toggle.dark .knob{transform:translateX(100%)}
+.toggle:focus-visible,a:focus-visible{outline:3px solid var(--lime);outline-offset:3px}
+
+main{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:64px 16px 0;min-height:88vh;min-height:88svh}
+.by{font-size:clamp(8px,2.2vw,12px);letter-spacing:.08em;color:#fff;text-shadow:2px 2px 0 var(--deep)}
+.by b{color:var(--lime);margin:0 8px}
+h1{margin:26px 0 0;font-family:"Bowlby One",Impact,sans-serif;font-weight:400;line-height:.92}
+h1 span{display:block;paint-order:stroke fill;-webkit-text-stroke:.09em var(--deep)}
+.t1{font-size:clamp(34px,9.2vw,118px);color:#fff;transform:skewX(-8deg) rotate(-2deg);text-shadow:0 .05em 0 var(--blue),0 .1em 0 var(--blue),0 .14em 0 var(--deep)}
+.t2{font-size:clamp(60px,17vw,220px);color:var(--lime);transform:skewX(-8deg) rotate(1.5deg);margin-top:.02em;text-shadow:0 .04em 0 #5f9a00,0 .08em 0 #5f9a00,0 .12em 0 var(--deep)}
+.tag{margin:34px 0 0;font-size:clamp(9px,2.4vw,14px);color:#fff;text-shadow:2px 2px 0 var(--deep);line-height:1.8}
+.pill{display:inline-block;background:var(--lime);padding:3px;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px)}
+.pill>div{background:var(--navy);color:#fff;padding:12px 18px;font-size:clamp(8px,2.3vw,12px);line-height:1.7;clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 6px,100% calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,0 calc(100% - 6px),0 6px)}
+.pill em{font-style:normal;color:var(--lime);margin:0 8px}
+.when{margin-top:26px}
+.count{display:flex;gap:clamp(8px,2.4vw,20px);margin-top:26px;justify-content:center}
+.tile{background:var(--navy);border:3px solid var(--lime);box-shadow:4px 4px 0 var(--deep);padding:14px 8px;min-width:clamp(64px,17vw,110px)}
+.tile b{display:block;font-weight:400;font-size:clamp(16px,4.6vw,34px);color:var(--lime);font-variant-numeric:tabular-nums}
+.tile span{display:block;margin-top:10px;font-size:clamp(6px,1.7vw,9px);color:#fff}
+.live{margin-top:26px;color:var(--lime);font-size:clamp(12px,3vw,20px);text-shadow:2px 2px 0 var(--deep)}
+
+.map{position:relative;z-index:1;width:100%;height:clamp(560px,100vh,900px);overflow:hidden}
+.earth{position:absolute;left:0;bottom:0;width:100%;height:100%;display:block}
+.hzd{opacity:var(--dayO);transition:opacity 1.4s}.hzn{opacity:var(--hazeN);transition:opacity 1.4s}
+.lbl{position:absolute;z-index:3;top:26%;font-size:clamp(7px,2vw,11px);color:#fff;text-shadow:2px 2px 0 var(--deep);line-height:1.6}
+.lbl.l{left:4%;transform:rotate(-8deg)}.lbl.r{right:4%;transform:rotate(8deg);text-align:right}
+.pinwrap{position:absolute;z-index:4;left:50%;bottom:47.8%;width:clamp(80px,14vw,130px);transform:translateX(-50%)}
+.pinwrap svg{display:block;width:100%;animation:hop 1.6s ease-in-out infinite;position:relative;z-index:1}
+.ring{position:absolute;left:50%;bottom:-14%;width:130%;height:34%;transform:translateX(-50%);border:6px solid var(--lime);border-radius:50%;animation:ping 1.6s ease-out infinite}
+@keyframes hop{50%{transform:translateY(-10px)}}
+@keyframes ping{from{transform:translateX(-50%) scale(.6);opacity:1}to{transform:translateX(-50%) scale(1.15);opacity:0}}
+.addr{position:absolute;z-index:3;left:50%;bottom:clamp(20px,5vw,40px);transform:translateX(-50%);width:min(92%,520px)}
+.addr .pill{display:block;background:var(--blue)}
+.addr .pill>div{display:flex;gap:14px;align-items:center;text-align:left;padding:14px 16px}
+.arrow{flex:none;width:0;height:0;border-left:11px solid transparent;border-right:11px solid transparent;border-bottom:22px solid var(--lime);transform:rotate(35deg)}
+.addr p{margin:0;font-size:clamp(7px,1.9vw,10px);line-height:1.9}
+.addr a{display:inline-block;margin-top:8px;color:var(--lime);font-size:clamp(7px,1.9vw,10px)}
+h1 .ch{display:inline-block;transform:translateY(var(--lift)) rotate(var(--tilt));transition:transform .35s cubic-bezier(.3,1.6,.5,1),color .2s;animation:snap 1.3s cubic-bezier(.2,1.3,.4,1) var(--d) backwards;cursor:default}
+@keyframes snap{from{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}to{transform:translateY(var(--lift)) rotate(var(--tilt));opacity:1}}
+.when{transition:transform .25s cubic-bezier(.3,1.6,.5,1)}.when:hover{transform:rotate(-2deg) scale(1.06)}
+.tile{transition:transform .2s,box-shadow .2s,background .2s}.tile:hover{transform:translate(-3px,-3px);box-shadow:7px 7px 0 var(--deep);background:var(--blue)}
+.toggle{transition:transform .2s,box-shadow .2s}.toggle:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--deep)}
+.tickwrap{margin-top:auto;padding-top:44px;width:110vw}
+.ticker{background:var(--lime);color:var(--navy);transform:rotate(-2deg);overflow:hidden;white-space:nowrap;border-block:4px solid var(--navy);box-shadow:0 6px 0 var(--deep)}
+.track{display:inline-flex;padding:12px 0;font-size:clamp(9px,2.2vw,13px);animation:marq 28s linear infinite}
+.ticker:hover .track{animation-play-state:paused}
+.track span{white-space:pre}
+@keyframes marq{to{transform:translateX(-25%)}}
+.hint{margin:18px 0 20px;background:none;border:0;color:#fff;font:inherit;font-size:9px;cursor:pointer;display:grid;justify-items:center;gap:10px;text-shadow:2px 2px 0 var(--deep);transition:opacity .4s}
+.hint i{width:12px;height:12px;border-right:4px solid var(--lime);border-bottom:4px solid var(--lime);transform:rotate(45deg);animation:nudge 1.2s steps(4) infinite}
+.hint.gone{opacity:0;pointer-events:none}
+.hint:hover{color:var(--lime)}
+@keyframes nudge{50%{transform:translateY(8px) rotate(45deg)}}
+.pinbtn{display:block;width:100%;background:none;border:0;padding:0;cursor:pointer}
+.pinbtn:focus-visible{outline:3px solid var(--lime);outline-offset:6px}
+.pinwrap:hover svg,.pinwrap.open svg{animation-duration:.5s;filter:drop-shadow(0 0 14px rgba(255,60,60,.8))}
+.pinwrap:hover .ring{animation-duration:.6s}
+.card{position:absolute;bottom:100%;left:50%;transform:translate(-50%,10px);padding-bottom:14px;width:max-content;max-width:78vw;opacity:0;pointer-events:none;transition:opacity .2s steps(4),transform .2s steps(4)}
+.pinwrap:hover .card,.pinwrap:focus-within .card,.pinwrap.open .card{opacity:1;pointer-events:auto;transform:translate(-50%,0)}
+.card .pill{background:var(--blue)}.card .pill>div{font-size:clamp(8px,2vw,11px);line-height:2;text-align:left}
+.card b{font-weight:400;color:var(--lime)}
+.card a,.addr a{color:var(--lime);padding:4px 6px;margin-left:-6px;display:inline-block}
+.card a:hover,.addr a:hover{background:var(--lime);color:var(--navy)}
+@media (prefers-reduced-motion:reduce){
+  .cloud,.bird{animation:none;transform:translateX(var(--x,20vw))}
+  .bird .mate,.bird g,.pinwrap svg,.ring,.stars i,.shoot{animation:none}.bird .fm,.bird .fb{opacity:0}
+  .layer,.orb,.stars,.birds,.haze{transition-duration:.01s}
+  .track,.hint i,h1 .ch{animation:none}
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
+<script>
+const { useState, useEffect, useMemo } = React;
+const html = htm.bind(React.createElement);
+
+/* ================= EDIT YOUR DETAILS HERE ================= */
+const CONFIG = {
+  org: "XIM UNIVERSITY",
+  tagline: "Tech fest • Coming soon",
+  college: "XIM University",
+  address: "Bhubaneswar, Odisha",
+  mapsUrl: "https://www.google.com/maps/place/XIM+University/@20.1581154,85.7624501,871m/data=!3m2!1e3!4b1!4m6!3m5!1s0x3a19af103360ec8f:0x734b96dc8afdf0ef!8m2!3d20.1581154!4d85.7624501!16s%2Fm%2F012ny3h3",
+  start: "2027-02-20T09:00:00+05:30",
+  time: "9AM–6PM",
+  liveText: "We’re live!",
+};
+/* ========================================================== */
+
+const CLOUD = [".....wwww.........","...wwwwwwww..wwww..","..wwwwwwwwwwwwwwwww","wwwwwwwwwwwwwwwwwww","wwwwwwwwwwwwwwwwwww",".sssssssssssssssss."].map(r=>r.padEnd(19,"."));
+const BIRD_A = ["kk.......kk",".kkk...kkk.","..kkkkkkk..","....kkk....",".....k....."];
+const BIRD_M = ["...........","kkk.....kkk","..kkkkkkk..","....kkk....",".....k....."];
+const BIRD_B = ["....kkk....",".kkkkkkkkk.","kkk.....kkk","kk.......kk","k.........k"];
+const SUN = ["...yyyyy...",".yyyyyyyyy.",".yyyyyyyyy.","yyyyyyyyyyy","yyyyyyyyyyy","yyyyyyyyyyy","yyyyyyyyyyy","yyyyyyyyyyy",".yyyyyyyyy.",".yyyyyyyyy.","...yyyyy..."];
+const MOON = ["...mmmmm...",".mmmmm.....",".mmmm......","mmmm.......","mmmm.......","mmmm.......","mmmm.......",".mmmm......",".mmmmm.....","...mmmmmm..",".....mmm..."];
+const PIN = ["....kkkkk....","..kkrrrrrkk..",".krrrrrrrrrk.",".krwwrrrrrrk.","krrwwrrrrrrrk","krrrrkkkrrrrk","krrrkbbbkrrrk","krrrkbbbkrrrk","krrrrkkkrrrrk",".krrrrrrrrrk.",".krrrrrrrrrk.","..krrrrrrrk..","..krrrrrrrk..","...krrrrrk...","....krrrk....","....krrrk....",".....krk.....","......k......"];
+const CLOUDS = [[4,34,70,-12,8],[14,22,95,-55,60],[30,30,80,-30,34],[46,18,110,-70,84],[62,26,88,-5,52],[8,16,120,-90,92]]; // top%, width vw, duration s, delay s, resting x vw
+const FLOCKS = [[6,34,-6,12,1,3],[17,46,-26,48,.8,5],[27,40,-14,78,.65,3],[3,52,-38,24,.9,1]]; // top%, duration s, delay s, resting x vw, size, birds in flock
+
+const Px = ({ rows, colors, className }) => html`
+  <svg viewBox=${`0 0 ${rows[0].length} ${rows.length}`} shapeRendering="crispEdges" className=${className} aria-hidden="true">
+    ${rows.flatMap((r, y) => [...r].map((ch, x) => colors[ch]
+      ? html`<rect key=${x + "," + y} x=${x} y=${y} width="1.02" height="1.02" style=${{ fill: colors[ch] }} />` : null))}
+  </svg>`;
+
+const cloudColors = { w: "var(--cw)", s: "var(--cs)" };
+const Rects = ({ rows }) => rows.flatMap((r, y) => [...r].map((ch, x) => ch === "k"
+  ? html`<rect key=${x + "," + y} x=${x} y=${y} width="1.02" height="1.02" style=${{ fill: "var(--bird)" }} />` : null));
+const FORM = [[0, 0], [-1.7, -1], [-1.7, 1], [-3.4, -2], [-3.4, 2]]; // V formation
+const Flock = ({ top, dur, delay, x, s, n }) => html`
+  <div className="bird" style=${{ top: top + "%", "--w": `calc(clamp(30px,3.8vw,52px) * ${s})`, animationDuration: dur + "s", animationDelay: delay + "s", "--x": x + "vw" }}>
+    ${FORM.slice(0, n).map(([dx, dy], i) => html`
+      <div key=${i} className="mate" style=${{ left: `calc(var(--w) * ${dx})`, top: `calc(var(--w) * ${dy * 0.55})`, animationDelay: i * -0.4 + "s" }}>
+        <svg viewBox="0 0 11 5" shapeRendering="crispEdges" style=${{ "--fd": i * -0.17 + "s" }}>
+          <g className="fa"><${Rects} rows=${BIRD_A} /></g>
+          <g className="fm"><${Rects} rows=${BIRD_M} /></g>
+          <g className="fb"><${Rects} rows=${BIRD_B} /></g>
+        </svg>
+      </div>`)}
+  </div>`;
+
+function Sky() {
+  const stars = useMemo(() => {
+    let s = 11; const r = () => (s = (s * 9301 + 49297) % 233280) / 233280;
+    return Array.from({ length: 46 }, () => ({ x: r() * 100, y: r() * 62, z: r() < 0.2 ? 4 : 2, d: r() * 4 }));
+  }, []);
+  return html`
+  <div className="sky" aria-hidden="true">
+    <div className="layer day"></div>
+    <div className="layer night"></div>
+    <div className="stars">
+      ${stars.map((s, i) => html`<i key=${i} style=${{ left: s.x + "%", top: s.y + "%", width: s.z, height: s.z, animationDelay: s.d + "s" }}></i>`)}
+      <i className="shoot"></i>
+    </div>
+    <div className="orb sun"><${Px} rows=${SUN} colors=${{ y: "#ffd23f" }} /></div>
+    <div className="orb moon"><${Px} rows=${MOON} colors=${{ m: "#fff6c8" }} /></div>
+    ${CLOUDS.map((c, i) => html`
+      <div key=${i} className="cloud" style=${{ top: c[0] + "%", width: c[1] + "vw", animationDuration: c[2] + "s", animationDelay: c[3] + "s", "--x": c[4] + "vw" }}>
+        <${Px} rows=${CLOUD} colors=${cloudColors} />
+      </div>`)}
+    <div className="birds">${FLOCKS.map((b, i) => html`<${Flock} key=${i} top=${b[0]} dur=${b[1]} delay=${b[2]} x=${b[3]} s=${b[4]} n=${b[5]} />`)}</div>
+  </div>`;
+}
+
+function Toggle({ theme, onClick }) {
+  const dark = theme === "dark";
+  return html`
+  <button className=${"toggle " + theme} onClick=${onClick} aria-pressed=${dark}
+    aria-label=${dark ? "Switch to day mode" : "Switch to night mode"}>
+    <span className="knob"></span>
+    <span className="cell"><${Px} rows=${SUN} colors=${{ y: "#ffd23f" }} /></span>
+    <span className="cell"><${Px} rows=${MOON} colors=${{ m: "#fff6c8" }} /></span>
+  </button>`;
+}
+
+function Countdown() {
+  const target = new Date(CONFIG.start).getTime();
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => { const t = setInterval(() => setNow(Date.now()), 1000); return () => clearInterval(t); }, []);
+  const left = target - now;
+  if (left <= 0) return html`<div className="live">${CONFIG.liveText}</div>`;
+  const p = n => String(n).padStart(2, "0");
+  const parts = [[Math.floor(left / 864e5), "DAYS"], [Math.floor(left / 36e5) % 24, "HRS"], [Math.floor(left / 6e4) % 60, "MIN"], [Math.floor(left / 1e3) % 60, "SEC"]];
+  return html`<div className="count" role="timer" aria-label="Time until Synchronize 5.0">
+    ${parts.map(([v, l]) => html`<div key=${l} className="tile"><b>${p(v)}</b><span>${l}</span></div>`)}
+  </div>`;
+}
+
+/* ---- Earth: a flat map wrapped around a sphere. Tweak SPHERE to change the look. ---- */
+const SPHERE = { top: 70, size: 0.85, py: 470 }; // top: where the planet starts, size: radius vs screen width (smaller = rounder), py: pin height (0-900 scale)
+const ROADS = [ // [path as [across, up] offsets from the pin, width, color]
+  [[[-900, -700], [-300, -200], [0, 0], [400, 260], [1100, 700]], 15, "#c6ff1a"],
+  [[[420, -800], [120, -200], [0, 0], [-250, 420], [-600, 1000]], 10, "#c6ff1a"],
+  [[[-1200, -420], [-400, -380], [300, -440], [1200, -330]], 10, "#2f6bff"],
+  [[[-1200, 300], [-300, 330], [400, 300], [1200, 380]], 8, "#2f6bff"],
+  [[[-1400, -800], [1400, -760]], 7, "#5b6a9e"],
+  [[[-1400, 650], [1400, 700]], 6, "#5b6a9e"],
+  [[[-700, -900], [-760, 200], [-900, 900]], 6, "#5b6a9e"],
+  [[[760, -900], [720, 300], [900, 900]], 6, "#5b6a9e"],
+  [Array.from({ length: 29 }, (_, i) => [400 + 34 * Math.cos(i / 28 * 6.2832), 260 + 34 * Math.sin(i / 28 * 6.2832)]), 7, "#c6ff1a"],
+];
+function makeEarth(vw) {
+  const R = Math.max(300, vw * SPHERE.size), cx = vw / 2, cy = SPHERE.top + R, LIM = Math.PI * R / 2 * 0.97;
+  const sph = (u, v) => { const p = Math.hypot(u, v); if (p > LIM) return null; const k = p ? R * Math.sin(p / R) / p : 1; return [cx + u * k, cy - v * k]; };
+  const vp = R * Math.asin(Math.max(-1, Math.min(1, (cy - SPHERE.py) / R)));
+  const at = (du, dv) => sph(du, vp + dv);
+  const pts = a => a.map(p => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ");
+  const road = (path, w, color, key) => {
+    const S = [], steps = path.length > 10 ? 1 : 20;
+    for (let i = 0; i < path.length - 1; i++) for (let t = 0; t < steps; t++)
+      S.push([path[i][0] + (path[i + 1][0] - path[i][0]) * t / steps, path[i][1] + (path[i + 1][1] - path[i][1]) * t / steps]);
+    S.push(path[path.length - 1]);
+    const L = [], B = [];
+    S.forEach((p, i) => {
+      const q = S[Math.min(i + 1, S.length - 1)], o = S[Math.max(i - 1, 0)];
+      const dx = q[0] - o[0], dy = q[1] - o[1], n = Math.hypot(dx, dy) || 1, nx = -dy / n * w / 2, ny = dx / n * w / 2;
+      const a = at(p[0] + nx, p[1] + ny), b = at(p[0] - nx, p[1] - ny);
+      if (a && b) { L.push(a); B.push(b); }
+    });
+    return L.length < 2 ? null : html`<polygon key=${key} points=${pts(L.concat(B.reverse()))} fill=${color} />`;
+  };
+  let sd = 7; const r = () => (sd = (sd * 9301 + 49297) % 233280) / 233280;
+  const shades = ["#16224f", "#1c2b63", "#223273", "#131d45"], cells = [];
+  for (let iv = -14; iv < 24; iv++) for (let iu = -26; iu < 26; iu++) {
+    const skip = r() < 0.13, shade = shades[Math.floor(r() * 4)];
+    const u0 = iu * 78 + 7, u1 = u0 + 64, v0 = iv * 78 + 7, v1 = v0 + 64;
+    const q = [at(u0, v0), at(u1, v0), at(u1, v1), at(u0, v1)];
+    if (skip || q.some(x => !x)) continue;
+    const xs = q.map(x => x[0]), ys = q.map(x => x[1]);
+    if (Math.max(...xs) < -20 || Math.min(...xs) > vw + 20 || Math.min(...ys) > 940) continue;
+    cells.push(html`<polygon key=${iu + "," + iv} points=${pts(q)} fill=${shade} />`);
+  }
+  const campus = pts([[-130, -70], [130, -70], [130, 70], [-130, 70]].map(c => at(c[0], c[1])));
+  return { R, cx, cy, cells, roads: ROADS.map((d, i) => road(d[0], d[1], d[2], i)), campus };
+}
+function Earth({ vw }) {
+  const q = Math.max(300, Math.round(vw / 8) * 8);
+  const E = useMemo(() => makeEarth(q), [q]);
+  return html`
+  <svg className="earth" viewBox=${"0 0 " + q + " 900"} preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <defs>
+      <clipPath id="earthClip"><circle cx=${E.cx} cy=${E.cy} r=${E.R} /></clipPath>
+      <radialGradient id="atmD" gradientUnits="userSpaceOnUse" cx=${E.cx} cy=${E.cy} r=${E.R}><stop offset="0.72" stopColor="rgb(150,225,255)" stopOpacity="0" /><stop offset="1" stopColor="rgb(150,225,255)" stopOpacity="0.95" /></radialGradient>
+      <radialGradient id="atmN" gradientUnits="userSpaceOnUse" cx=${E.cx} cy=${E.cy} r=${E.R}><stop offset="0.72" stopColor="rgb(60,80,230)" stopOpacity="0" /><stop offset="1" stopColor="rgb(60,80,230)" stopOpacity="0.95" /></radialGradient>
+    </defs>
+    <circle cx=${E.cx} cy=${E.cy} r=${E.R} fill="#0b1330" />
+    <g clipPath="url(#earthClip)">
+      ${E.cells}
+      <polygon points=${E.campus} fill="#145a3f" stroke="#1f8a5f" strokeWidth="3" />
+      ${E.roads}
+      <circle className="hzd" cx=${E.cx} cy=${E.cy} r=${E.R} fill="url(#atmD)" />
+      <circle className="hzn" cx=${E.cx} cy=${E.cy} r=${E.R} fill="url(#atmN)" />
+    </g>
+    <circle className="hzd" cx=${E.cx} cy=${E.cy} r=${E.R} fill="none" stroke="rgb(170,230,255)" strokeWidth="7" style=${{ filter: "blur(4px)" }} />
+    <circle className="hzn" cx=${E.cx} cy=${E.cy} r=${E.R} fill="none" stroke="rgb(90,120,255)" strokeWidth="7" style=${{ filter: "blur(4px)" }} />
+  </svg>`;
+}
+
+function MapSection() {
+  const link = CONFIG.mapsUrl;
+  const [open, setOpen] = useState(false);
+  const ref = React.useRef(null);
+  const [vw, setVw] = useState(1200);
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    const f = () => setVw(900 * el.clientWidth / Math.max(1, el.clientHeight));
+    f(); const ro = new ResizeObserver(f); ro.observe(el); return () => ro.disconnect();
+  }, []);
+  return html`
+  <section className="map" id="map" ref=${ref} aria-label="Venue location">
+    <${Earth} vw=${vw} />
+    <span className="lbl l">VENUE<br />REVEALED</span>
+    <span className="lbl r">FIND US<br />HERE</span>
+    <div className=${"pinwrap" + (open ? " open" : "")}>
+      <button className="pinbtn" onClick=${() => setOpen(o => !o)} aria-expanded=${open} aria-label=${CONFIG.college + " location"}>
+        <${Px} rows=${PIN} colors=${{ k: "#0b1330", r: "#e8232b", w: "#ffd6d6", b: "#2fb3ff" }} />
+      </button>
+      <i className="ring"></i>
+      <div className="card"><div className="pill"><div>
+        <b>${CONFIG.college}</b><br />${CONFIG.address}<br />
+        <a href=${link} target="_blank" rel="noopener">TAKE ME THERE &#9654;</a>
+      </div></div></div>
+    </div>
+    <div className="addr"><div className="pill"><div>
+      <i className="arrow"></i>
+      <div>
+        <p>${CONFIG.college}</p><p>${CONFIG.address}</p>
+        <a href=${link} target="_blank" rel="noopener">OPEN IN MAPS</a>
+      </div>
+    </div></div></div>
+  </section>`;
+}
+
+function Letters({ text, base }) {
+  return [...text].map((ch, i) => {
+    const r = ((i * 7919 + base) % 13) / 13 - 0.5, q = ((i * 104729 + base) % 11) / 11 - 0.5;
+    return html`<span key=${i} className="ch" aria-hidden="true" style=${{ "--dx": r * 9 + "em", "--dy": q * 6 + "em", "--r": r * 160 + "deg", "--d": i * 70 + base + "ms", "--tilt": (i % 2 ? -2.2 : 2.2) + "deg", "--lift": ((i % 3) - 1) * 0.03 + "em" }}>${ch}</span>`;
+  });
+}
+const Title = () => html`<h1 aria-label="Synchronize 5.0"><span className="t1"><${Letters} text="Synchronize" base=${0} /></span><span className="t2"><${Letters} text="5.0" base=${900} /></span></h1>`;
+
+const Ticker = () => {
+  const t = "COMING SOON  +  SYNCHRONIZE 5.0  +  " + CONFIG.college.toUpperCase() + "  +  ";
+  return html`<div className="ticker" aria-hidden="true"><div className="track">${[0, 1, 2, 3].map(i => html`<span key=${i}>${t.repeat(3)}</span>`)}</div></div>`;
+};
+
+function useTheme() {
+  const [theme, setTheme] = useState(() => {
+    try { const s = localStorage.getItem("sync-theme"); if (s) return s; } catch (e) {}
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  });
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    try { localStorage.setItem("sync-theme", theme); } catch (e) {}
+  }, [theme]);
+  return [theme, () => setTheme(t => (t === "dark" ? "light" : "dark"))];
+}
+
+function App() {
+  const [theme, flip] = useTheme();
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => { const f = () => setScrolled(window.scrollY > 40); window.addEventListener("scroll", f, { passive: true }); return () => window.removeEventListener("scroll", f); }, []);
+  const date = new Date(CONFIG.start).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Kolkata" }).toUpperCase();
+  return html`<${React.Fragment}>
+    <${Sky} />
+    <${Toggle} theme=${theme} onClick=${flip} />
+    <main>
+      <div className="by"><b>+</b>${CONFIG.org} presents<b>+</b></div>
+      <${Title} />
+      <p className="tag">${CONFIG.tagline}</p>
+      <div className="pill when"><div>${date}<em>|</em>${CONFIG.time}</div></div>
+      <${Countdown} />
+      <div className="tickwrap"><${Ticker} /></div>
+      <button className=${"hint" + (scrolled ? " gone" : "")} onClick=${() => document.getElementById("map").scrollIntoView({ behavior: "smooth" })} aria-label="Scroll to the venue map"><span>SCROLL</span><i></i></button>
+    </main>
+    <${MapSection} />
+  <//>`;
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(html`<${App} />`);
+</script>
+</body>
+</html>
