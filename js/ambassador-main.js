@@ -2,12 +2,12 @@
    ambassador-main.js – Standalone Campus Ambassador Entry
    ========================================================= */
 import { html, Fragment } from "./lib.js";
-import { CONFIG } from "./config.js";
+import { CONFIG } from "./config.js?v=3";
 import { useTheme } from "./hooks/use-theme.js";
 import { Sky } from "./components/sky.js";
 import { Toggle } from "./components/toggle.js";
 import { Ticker } from "./components/ticker.js";
-import { CampusAmbassador } from "./components/ambassador.js";
+import { CampusAmbassador } from "./components/ambassador.js?v=3";
 
 export function AmbassadorApp() {
   const [theme, flip] = useTheme();

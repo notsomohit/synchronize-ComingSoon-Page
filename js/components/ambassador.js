@@ -86,12 +86,12 @@ const GET_ITEMS = [
 ];
 
 export function CampusAmbassador({ isStandalone = false } = {}) {
-  const formUrl = CONFIG.ambassadorFormUrl || "https://forms.google.com/";
+  const formUrl = CONFIG.ambassadorFormUrl || "https://forms.gle/MQk3CCRQc6FucCEP8";
 
   return html`
     <div className="ca-container">
       ${isStandalone &&
-      html`
+    html`
         <nav className="ca-top-nav">
           <a href="index.html" className="ca-back-link" title="Return to home page">
             ◄ BACK TO FEST
@@ -144,7 +144,7 @@ export function CampusAmbassador({ isStandalone = false } = {}) {
 
         <div className="ca-grid">
           ${DO_ITEMS.map(
-            (item) => html`
+      (item) => html`
               <article key=${item.num} className="ca-card">
                 <div className="ca-card-top">
                   <span className="ca-tag">
@@ -157,7 +157,7 @@ export function CampusAmbassador({ isStandalone = false } = {}) {
                 <p className="ca-card-desc">${item.text}</p>
               </article>
             `
-          )}
+    )}
         </div>
       </section>
 
@@ -173,7 +173,7 @@ export function CampusAmbassador({ isStandalone = false } = {}) {
 
         <div className="ca-grid">
           ${GET_ITEMS.map(
-            (item) => html`
+      (item) => html`
               <article key=${item.num} className="ca-card ca-reward-card">
                 <div className="ca-card-top">
                   <span className="ca-tag ca-tag-reward">
@@ -186,7 +186,7 @@ export function CampusAmbassador({ isStandalone = false } = {}) {
                 <p className="ca-card-desc">${item.text}</p>
               </article>
             `
-          )}
+    )}
         </div>
       </section>
 
