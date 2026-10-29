@@ -1,0 +1,23 @@
+{
+  "name": "synchronize-5.0",
+  "version": "1.0.0",
+  "description": "Synchronize 5.0 – Flagship Tech Fest Coming Soon & Campus Ambassador Page",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "serve": "node server.js"
+  },
+  "keywords": [
+    "tech-fest",
+    "xim-university",
+    "synchronize",
+    "coming-soon",
+    "campus-ambassador",
+    "pixel-art",
+    "upside-down"
+  ],
+  "author": "XIM University",
+  "license": "MIT"
+}
+

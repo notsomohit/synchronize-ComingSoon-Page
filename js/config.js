@@ -12,4 +12,5 @@ export const CONFIG = {
   start: "2027-02-20T09:00:00+05:30",
   time: "9AM–6PM",
   liveText: "We're live!",
+  ambassadorFormUrl: "https://forms.google.com/",
 };

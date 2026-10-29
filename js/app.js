@@ -48,6 +48,17 @@ export function App() {
 
         <${Countdown} />
 
+        <a
+          href="ambassador.html"
+          className="pill ca-redirect-pill"
+          aria-label="Become a Campus Ambassador"
+        >
+          <div>
+            <b>BECOME A CAMPUS AMBASSADOR</b>
+            <em>➔</em>
+          </div>
+        </a>
+
         <div className="tickwrap"><${Ticker} /></div>
 
         <button

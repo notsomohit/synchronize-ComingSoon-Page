@@ -131,3 +131,110 @@ export const ROADS = [
     "#c6ff1a",
   ],
 ];
+
+/* Campus Ambassador Sprites */
+export const MEGAPHONE = [
+  "............",
+  "......kkkk..",
+  "....kkyyykk.",
+  "...kyyyyyyk.",
+  "..kyyyyyyyk.",
+  ".kyyyyyyyykk",
+  "kyyykkkyyyyy",
+  "kyyyyykkyyyy",
+  ".kyyyyyyyykk",
+  "..kyyyyyyyk.",
+  "...kkyyykk..",
+  ".....kkkk...",
+];
+
+export const TROPHY = [
+  "..kkkkkkkk..",
+  ".kkyyyyyykk.",
+  "kyyyyyyyyyyk",
+  "kyykwkkyyyyk",
+  "kyyywkyyyyyk",
+  ".kyyyyyyyyk.",
+  "..kkyyyykk..",
+  "...kkyykk...",
+  "....kyyk....",
+  "...kkyykk...",
+  "..kyyyyyyyk.",
+  "..kkkkkkkk..",
+];
+
+export const CERTIFICATE = [
+  "..kkkkkkkk..",
+  ".kwwwwwwwwk.",
+  "kwwwwwwwwwwk",
+  "kwkkkkkkkkwk",
+  "kwwwwwwwwwwk",
+  "kwkkkkkkkkwk",
+  "kwwwwwwwwwwk",
+  "kwkkyyykkwk.",
+  "kwwwyyyywwwk",
+  ".kwwyyyywwk.",
+  "..kkyyyykk..",
+  "...kk..kk...",
+];
+
+export const GAMEPAD = [
+  "............",
+  "..kkkkkkkk..",
+  ".kbbbbbbbbk.",
+  "kbbwbbbbwbk.",
+  "kbwwwbbwkwbk",
+  "kbbwbbbbwbk.",
+  "kbbbbbbbbbbk",
+  "kbbkkbbkkbbk",
+  ".kk..kk..kk.",
+  "............",
+  "............",
+  "............",
+];
+
+export const WALKIE = [
+  ".....kk.....",
+  ".....kk.....",
+  "....kkkk....",
+  "...krrrrk...",
+  "..krrrrrrk..",
+  "..krkyykrk..",
+  "..krrrrrrk..",
+  "..krkkkkrk..",
+  "..krrrrrrk..",
+  "..krrrrrrk..",
+  "...kkkkkk...",
+  "............",
+];
+
+export const STAR_BADGE = [
+  ".....kk.....",
+  "....kyyk....",
+  "....kyyk....",
+  "kkkkkyykkkkk",
+  ".kyyyyyyyyk.",
+  "..kyyyyyyk..",
+  "..kyyyyyyk..",
+  ".kyykkkkyyk.",
+  "kkyk....kykk",
+  "kk........kk",
+  "............",
+  "............",
+];
+
+export const NETWORK = [
+  "....kkkk....",
+  "...kbbbbk...",
+  "...kbbbbk...",
+  "....kkkk....",
+  "....k..k....",
+  ".kkkk..kkkk.",
+  "kyyyk..kgggk",
+  "kyyykkkkgggk",
+  "kyyyk..kgggk",
+  ".kkkk..kkkk.",
+  "............",
+  "............",
+];
+

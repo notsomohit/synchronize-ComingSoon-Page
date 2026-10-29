@@ -4,11 +4,12 @@
 import { html } from "../lib.js";
 import { CONFIG } from "../config.js";
 
-export const Ticker = () => {
+export const Ticker = ({ text } = {}) => {
   const t =
+    text ||
     "COMING SOON  +  SYNCHRONIZE 5.0  +  " +
-    CONFIG.college.toUpperCase() +
-    "  +  ";
+      CONFIG.college.toUpperCase() +
+      "  +  ";
 
   return html`
     <div className="ticker" aria-hidden="true">
