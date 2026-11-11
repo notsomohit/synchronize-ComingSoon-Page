@@ -42,9 +42,21 @@ export function App() {
         <${Title} />
         <p className="tag">${CONFIG.tagline}</p>
 
-        <div className="pill when">
-          <div>${date}<em>|</em>${CONFIG.time}</div>
-        </div>
+        ${CONFIG.datesRevealed
+          ? html`
+              <div className="pill when">
+                <div>${date}<em>|</em>${CONFIG.time}</div>
+              </div>
+            `
+          : html`
+              <div className="pill when mystery-pill" aria-label="Dates classified, dropping soon">
+                <div>
+                  <span className="classified-tag">${CONFIG.dateStatus || "STATUS: CLASSIFIED"}</span>
+                  <em>|</em>
+                  <span>${CONFIG.dateMessage || "DATES DROPPING SOON"}</span>
+                </div>
+              </div>
+            `}
 
         <${Countdown} />
 

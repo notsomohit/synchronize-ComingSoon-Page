@@ -188,6 +188,18 @@ h1 .ch {
 .when { margin-top: 26px; transition: transform .25s cubic-bezier(.3, 1.6, .5, 1); }
 .when:hover { transform: rotate(-2deg) scale(1.06); }
 
+/* ---- Mystery Classified Pill ---- */
+.mystery-pill > div {
+  display: flex; align-items: center; justify-content: center;
+  flex-wrap: wrap; gap: 4px;
+}
+.classified-tag {
+  color: #ff4757;
+  font-weight: bold;
+  letter-spacing: .06em;
+  text-shadow: 0 0 8px rgba(255, 71, 87, 0.65);
+}
+
 /* ---- Countdown tiles ---- */
 .count {
   display: flex; gap: clamp(8px, 2.4vw, 20px); margin-top: 26px; justify-content: center;
@@ -196,7 +208,7 @@ h1 .ch {
   background: var(--navy); border: 3px solid var(--lime);
   box-shadow: 4px 4px 0 var(--deep); padding: 14px 8px;
   min-width: clamp(64px, 17vw, 110px);
-  transition: transform .2s, box-shadow .2s, background .2s;
+  transition: transform .2s, box-shadow .2s, background .2s, border-color .15s;
 }
 .tile:hover {
   transform: translate(-3px, -3px); box-shadow: 7px 7px 0 var(--deep);
@@ -208,6 +220,24 @@ h1 .ch {
 }
 .tile span {
   display: block; margin-top: 10px; font-size: clamp(6px, 1.7vw, 9px); color: #fff;
+}
+
+/* ---- Mystery Glitch Tiles ---- */
+.tile.mystery b {
+  font-family: "Press Start 2P", monospace;
+  letter-spacing: 0.08em;
+  color: var(--lime);
+  text-shadow: 0 0 10px rgba(198, 255, 26, 0.4);
+}
+.tile.mystery.glitch {
+  border-color: #ff4757;
+  box-shadow: 4px 4px 0 #7a0010;
+  background: #190a18;
+  transform: translate(-1px, -2px);
+}
+.tile.mystery.glitch b {
+  color: #ff4757;
+  text-shadow: 0 0 12px rgba(255, 71, 87, 0.9);
 }
 .live {
   margin-top: 26px; color: var(--lime); font-size: clamp(12px, 3vw, 20px);
